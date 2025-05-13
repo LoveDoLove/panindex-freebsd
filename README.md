@@ -1,115 +1,104 @@
+<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a id="readme-top"></a>
 
-# PanIndex-FreeBSD
+<!-- PROJECT SHIELDS -->
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Build FreeBSD](https://img.shields.io/badge/build-FreeBSD%2013.2-blue)](https://github.com/px-org/PanIndex)
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <h3 align="center">PanIndex FreeBSD Build</h3>
+  <p align="center">
+    Automated FreeBSD build workflow for <a href="https://github.com/px-org/PanIndex">PanIndex</a>.<br />
+    <a href="#about-the-project"><strong>Explore the docs »</strong></a>
+    <br />
+    <a href="https://github.com/LoveDoLove/panindex-freebsd/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/LoveDoLove/panindex-freebsd/issues">Request Feature</a>
+  </p>
+</div>
 
-A FreeBSD-compatible build and release workflow for [PanIndex](https://github.com/px-org/PanIndex), an open-source file indexing and management tool. This project automates the process of building PanIndex for FreeBSD, packaging, and releasing artifacts via GitHub Actions.
-
----
-
-## Table of Contents
-- [About The Project](#about-the-project)
-- [Built With](#built-with)
-- [Getting Started](#getting-started)
-- [Usage](#usage)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-- [Acknowledgments](#acknowledgments)
-
----
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
 
 ## About The Project
 
-This repository provides a GitHub Actions workflow to build and release PanIndex for FreeBSD (amd64). It ensures that the latest version of PanIndex is automatically built using a FreeBSD VM, and the resulting binary is published as a GitHub release artifact.
+This repository provides an automated workflow and build environment for compiling the [PanIndex](https://github.com/px-org/PanIndex) project for FreeBSD 14.1 (amd64). It includes GitHub Actions CI/CD, a cross-compilation shell script, and configuration for reproducible builds.
 
-**Key Features:**
-- Automated scheduled and manual builds for FreeBSD 13.2
-- Fetches the latest PanIndex tag and builds with Go 1.22
-- Publishes the FreeBSD binary as a GitHub release
-- MIT licensed
+- **Automated FreeBSD builds** using GitHub Actions
+- **Cross-compilation** with Clang and Go
+- **Release automation** for PanIndex binaries
+- **Attribution:** PanIndex is developed by [px-org](https://github.com/px-org/PanIndex). This build system and workflow are maintained by [LoveDoLove](https://github.com/LoveDoLove).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
----
+### Built With
 
-## Built With
-- [Go (Golang)](https://golang.org/) 1.22
+- [Go](https://golang.org/)
+- [Clang](https://clang.llvm.org/)
 - [GitHub Actions](https://github.com/features/actions)
-- [FreeBSD 13.2](https://www.freebsd.org/)
-- [jq, wget, curl, git, gcc, bash, gawk, gsed]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
----
 
 ## Getting Started
 
-To build PanIndex for FreeBSD locally or understand the CI process, follow these steps:
+To build PanIndex for FreeBSD locally or via CI:
 
 ### Prerequisites
-- FreeBSD 13.2 (or compatible)
-- Go 1.22+
-- git, gcc, bash, gawk, gsed, jq, wget, curl
+- Go (latest)
+- Clang with FreeBSD 14.1 cross toolchain
+- Bash
+- Git
 
-### Installation & Build
+### Installation
 
-1. **Clone the repository:**
+1. Clone this repository:
    ```sh
-   git clone https://github.com/px-org/PanIndex.git
-   cd PanIndex
+   git clone https://github.com/LoveDoLove/panindex-freebsd.git
+   cd panindex-freebsd
    ```
-2. **Install dependencies:**
+2. Ensure you have the FreeBSD 14.1 sysroot at `/opt/freebsd` (see workflow for details).
+3. Run the build script:
    ```sh
-   pkg install -y jq node18 npm-node18 wget curl git gcc bash gawk gsed
-   wget https://dl.google.com/go/go1.22.0.freebsd-amd64.tar.gz && tar -C /usr/local -xzf go1.22.0.freebsd-amd64.tar.gz && rm go1.22.0.freebsd-amd64.tar.gz
-   ln -s /usr/local/go/bin/go /usr/local/bin/go
+   bash build.sh
    ```
-3. **Build the binary:**
-   ```sh
-   export APP_NAME="PanIndex"
-   export ldflags="-w -s -X 'github.com/px-org/PanIndex/module.VERSION=$(git describe --tags)' -X 'github.com/px-org/PanIndex/module.BUILD_TIME=$(date "+%F %T")' -X 'github.com/px-org/PanIndex/module.GO_VERSION=$(go version)' -X 'github.com/px-org/PanIndex/module.GIT_COMMIT_SHA=$(git show -s --format=%H)'"
-   CGO_ENABLED=1 go build -o ${APP_NAME} -ldflags="$ldflags" -tags=jsoniter .
-   ```
-
-Or simply use the provided GitHub Actions workflow for automated builds and releases.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
----
 
 ## Usage
 
-After building, run the PanIndex binary on your FreeBSD system:
-
-```sh
-./PanIndex
-```
-
-Refer to the [PanIndex documentation](https://github.com/px-org/PanIndex) for configuration and usage details.
+- The build script (`build.sh`) will fetch version info, set up environment variables, and build PanIndex for FreeBSD.
+- GitHub Actions workflow (`.github/workflows/build.yml`) automates this process and creates releases.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
----
 
 ## Roadmap
-- [x] Automated FreeBSD build and release
-- [ ] Add more FreeBSD versions
-- [ ] Add tests and CI for other platforms
-- [ ] Improve documentation
 
-See the [issues](https://github.com/px-org/PanIndex/issues) for more.
+- [x] Automated FreeBSD build workflow
+- [x] Release automation
+- [ ] Add more FreeBSD versions
+- [ ] Add test automation
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
----
 
 ## Contributing
 
-Contributions are welcome! Please fork the repo, create a feature branch, and submit a pull request. For major changes, open an issue first to discuss your ideas.
+Contributions are welcome! Please fork the repo and submit a pull request. For major changes, open an issue first to discuss what you would like to change.
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -119,31 +108,37 @@ Contributions are welcome! Please fork the repo, create a feature branch, and su
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
----
-
 ## License
 
-Distributed under the MIT License. See [`LICENSE`](./LICENSE) for details.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
----
 
 ## Contact
 
-Maintainer: [LoveDoLove](https://github.com/LoveDoLove)
+LoveDoLove - [@LoveDoLove](https://github.com/LoveDoLove)
 
-Project Link: [https://github.com/px-org/PanIndex](https://github.com/px-org/PanIndex)
+Project Link: [https://github.com/LoveDoLove/panindex-freebsd](https://github.com/LoveDoLove/panindex-freebsd)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
----
 
 ## Acknowledgments
 
-- [PanIndex](https://github.com/px-org/PanIndex)
-- [FreeBSD](https://www.freebsd.org/)
+- [PanIndex by px-org](https://github.com/px-org/PanIndex)
+- [Best-README-Template by othneildrew](https://github.com/othneildrew/Best-README-Template)
 - [GitHub Actions](https://github.com/features/actions)
-- [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
+- [Choose an Open Source License](https://choosealicense.com)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[contributors-shield]: https://img.shields.io/github/contributors/LoveDoLove/panindex-freebsd.svg?style=for-the-badge
+[contributors-url]: https://github.com/LoveDoLove/panindex-freebsd/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/LoveDoLove/panindex-freebsd.svg?style=for-the-badge
+[forks-url]: https://github.com/LoveDoLove/panindex-freebsd/network/members
+[stars-shield]: https://img.shields.io/github/stars/LoveDoLove/panindex-freebsd.svg?style=for-the-badge
+[stars-url]: https://github.com/LoveDoLove/panindex-freebsd/stargazers
+[issues-shield]: https://img.shields.io/github/issues/LoveDoLove/panindex-freebsd.svg?style=for-the-badge
+[issues-url]: https://github.com/LoveDoLove/panindex-freebsd/issues
+[license-shield]: https://img.shields.io/github/license/LoveDoLove/panindex-freebsd.svg?style=for-the-badge
+[license-url]: https://github.com/LoveDoLove/panindex-freebsd/blob/main/LICENSE
