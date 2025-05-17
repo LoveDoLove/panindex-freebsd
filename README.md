@@ -22,6 +22,9 @@
   </p>
 </div>
 
+<!-- ZMTO Acknowledgment -->
+> **Note:** This project is supported by [ZMTO](https://www.zmto.com) as part of their open-source VPS program. Special thanks to ZMTO for empowering open-source innovation!
+
 <details>
   <summary>Table of Contents</summary>
   <ol>
