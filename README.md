@@ -1,127 +1,166 @@
-# PanIndex for FreeBSD
+<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/LoveDoLove/panindex-freebsd/build.yml?branch=main)](https://github.com/LoveDoLove/panindex-freebsd/actions/workflows/build.yml)
+<a id="readme-top"></a>
 
-This project provides automated daily builds of [PanIndex](https://github.com/px-org/PanIndex) for FreeBSD platforms. PanIndex is a network disk directory index tool that supports multiple cloud storage platforms.
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
-## About PanIndex
+<br />
+<div align="center">
+  <a href="https://github.com/LoveDoLove/panindex-freebsd">
+    <img src="images/logo.png" alt="PanIndex FreeBSD Logo" width="80" height="80">
+  </a>
 
-PanIndex is a powerful file indexing and sharing platform that provides:
+<h3 align="center">PanIndex FreeBSD</h3>
 
-- Cross-platform compatibility and easy deployment
-- Support for multiple storage providers
-- Multiple themes including dark mode
-- File previews (images, videos, audio, code, PDF, ePub, markdown)
-- Direct download links
-- Anti-leech protection
-- Short and share links
-- Access control
-- WebDAV support
-- And more...
+  <p align="center">
+    FreeBSD build and packaging for PanIndex, a modern file indexing and sharing server. This project automates building PanIndex for FreeBSD using GitHub Actions and custom scripts.
+    <br />
+    <a href="https://github.com/LoveDoLove/panindex-freebsd"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/LoveDoLove/panindex-freebsd">View Demo</a>
+    &middot;
+    <a href="https://github.com/LoveDoLove/panindex-freebsd/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    &middot;
+    <a href="https://github.com/LoveDoLove/panindex-freebsd/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+  </p>
+</div>
 
-## Supported Storage Platforms
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
 
-PanIndex supports a wide range of storage providers:
+## About The Project
 
-- Local directory
-- Cloud 189
-- Teambition Team
-- Aliyundrive (share)
-- OneDrive / Sharepoint (global and CN)
-- Cloud 139
-- Google Drive
-- WebDav
-- FTP
-- S3 (Object Storage)
-- PikPak
-- Cloud 115
-- Cloud 123
+PanIndex FreeBSD provides scripts and automation to build the PanIndex file indexing and sharing server for FreeBSD. It fetches the latest upstream release, configures the build environment, and produces FreeBSD-compatible binaries. This project is not the original PanIndex, but a downstream build/packaging effort for FreeBSD users.
 
-## Build Information
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-The FreeBSD build is automatically compiled every day at midnight UTC using GitHub Actions. The build process:
+### Built With
 
-1. Sets up a FreeBSD base environment
-2. Clones the latest tagged version of PanIndex from the official repository
-3. Compiles with FreeBSD-specific optimizations
-4. Creates a release with the compiled binary
+- [Go](https://golang.org/)
+- [GitHub Actions](https://github.com/features/actions)
+- [FreeBSD](https://www.freebsd.org/)
 
-## Installation
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Download Binary
+## Getting Started
 
-You can download the latest PanIndex FreeBSD binary from the [Releases](https://github.com/LoveDoLove/panindex-freebsd/releases) page.
+To build PanIndex for FreeBSD locally, follow these steps.
 
-### Running on FreeBSD
+### Prerequisites
 
-1. Download the latest release
-2. Make it executable:
-   ```sh
-   chmod +x PanIndex
-   ```
-3. Run the executable:
-   ```sh
-   ./PanIndex
-   ```
-4. Access the web interface at `http://localhost:5238` by default
+- Go (latest version recommended)
+- Clang with FreeBSD cross-compilation support
+- Git
+- Bash
 
-## Building Manually
-
-If you want to build PanIndex for FreeBSD manually:
+### Installation
 
 1. Clone this repository:
    ```sh
    git clone https://github.com/LoveDoLove/panindex-freebsd.git
    cd panindex-freebsd
    ```
-
-2. Make sure you have a FreeBSD environment set up or use the same approach as in the GitHub workflow:
+2. Ensure you have a FreeBSD sysroot at `/opt/freebsd` (see GitHub Actions for setup example).
+3. Run the build script:
    ```sh
-   # Set up FreeBSD base (example for Linux host)
-   wget -q https://download.freebsd.org/releases/amd64/14.3-RELEASE/base.txz
-   sudo mkdir /opt/freebsd && sudo tar -xf ./base.txz -C /opt/freebsd
+   bash build.sh
    ```
+4. The resulting binary will be built for FreeBSD.
 
-3. Clone the PanIndex repository:
-   ```sh
-   export LATEST_APP=$(wget -qO- https://api.github.com/repos/px-org/PanIndex/tags | gawk -F '["v]' '/name/{print "v"$5;exit}')
-   git clone -b $LATEST_APP https://github.com/px-org/PanIndex
-   ```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-4. Run the build script:
-   ```sh
-   cd PanIndex
-   bash ../build.sh
-   ```
+## Usage
+
+After building, deploy the resulting PanIndex binary to your FreeBSD system. For usage and configuration, refer to the [upstream PanIndex documentation](https://github.com/px-org/PanIndex).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Contributing
 
-Contributions to improve the FreeBSD build process are welcome:
+Contributions are welcome! Please fork the repo and submit a pull request, or open an issue for suggestions and bug reports.
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/amazing-improvement`)
-3. Commit your changes (`git commit -m 'Add some amazing improvement'`)
-4. Push to the branch (`git push origin feature/amazing-improvement`)
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Top contributors:
+
+<a href="https://github.com/LoveDoLove/panindex-freebsd/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=LoveDoLove/panindex-freebsd" alt="contrib.rocks image" />
+</a>
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Distributed under the MIT License. See `LICENSE` for more information.
 
-## Disclaimer
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-- This build is an unofficial FreeBSD port of PanIndex
-- The original PanIndex project is licensed under AGPL-3.0
-- Please follow all applicable laws and regulations when using this software
-- This program is designed for sharing network disk files; please do not abuse it
-- The maintainers of this build are not responsible for any misuse of the software
+## Contact
+
+LoveDoLove - [@LoveDoLove](https://github.com/LoveDoLove)
+
+Project Link: [https://github.com/LoveDoLove/panindex-freebsd](https://github.com/LoveDoLove/panindex-freebsd)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Sponsorship
 
 This project is proudly supported by [ZMTO](https://www.zmto.com) as part of their open-source VPS program. We extend our sincere gratitude to ZMTO for their valuable resources and commitment to empowering open-source innovation.
 
-## Links
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-- [Original PanIndex Project](https://github.com/px-org/PanIndex)
-- [PanIndex Documentation](https://docs.noki.icu/)
+## Acknowledgments
+
+- [PanIndex Upstream](https://github.com/px-org/PanIndex)
+- [FreeBSD Project](https://www.freebsd.org/)
+- [GitHub Actions](https://github.com/features/actions)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+
+[contributors-shield]: https://img.shields.io/github/contributors/LoveDoLove/panindex-freebsd.svg?style=for-the-badge
+[contributors-url]: https://github.com/LoveDoLove/panindex-freebsd/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/LoveDoLove/panindex-freebsd.svg?style=for-the-badge
+[forks-url]: https://github.com/LoveDoLove/panindex-freebsd/network/members
+[stars-shield]: https://img.shields.io/github/stars/LoveDoLove/panindex-freebsd.svg?style=for-the-badge
+[stars-url]: https://github.com/LoveDoLove/panindex-freebsd/stargazers
+[issues-shield]: https://img.shields.io/github/issues/LoveDoLove/panindex-freebsd.svg?style=for-the-badge
+[issues-url]: https://github.com/LoveDoLove/panindex-freebsd/issues
+[license-shield]: https://img.shields.io/github/license/LoveDoLove/panindex-freebsd.svg?style=for-the-badge
+[license-url]: https://github.com/LoveDoLove/panindex-freebsd/blob/main/LICENSE
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/
+[product-screenshot]: images/screenshot.png
